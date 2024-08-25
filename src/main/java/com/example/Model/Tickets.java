@@ -1,16 +1,31 @@
-package com.example.Model;
+package com.example.model;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import lombok.Getter;
 
 public class Tickets {
+    @Getter
     private String origin;
+    @Getter
     private String origin_name;
+    @Getter
     private String destination;
+    @Getter
     private String destination_name;
+    @Getter
     private String departure_date;
+    @Getter
     private String departure_time;
+    @Getter
     private String arrival_date;
+    @Getter
     private String arrival_time;
+    @Getter
     private String carrier;
+    @Getter
     private int stops;
+    @Getter
     private int price;
 
     public Tickets(String origin, String origin_name, String destination, String destination_name, String departure_date, String departure_time, String arrival_date, String arrival_time, String carrier, int stops, int price){
@@ -26,49 +41,15 @@ public class Tickets {
         this.stops = stops;
         this.price = price;
     }
-    
-    public String getOrigin() {
-        return origin;
+
+    public LocalDateTime getDepartureDateTime(){
+        LocalDateTime departureDateTime = LocalDateTime.parse(this.departure_date + " " + this.departure_time, DateTimeFormatter.ofPattern("d.M.y H:m")).plusYears(2000);
+        return departureDateTime;
     }
 
-    public String getOriginName() {
-        return origin_name;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public String getDestinationName() {
-        return destination_name;
-    }
-
-    public String getDepartureDate() {
-        return departure_date;
-    }
-
-    public String getDepartureTime() {
-        return departure_time;
-    }
-
-    public String getArrivalDate() {
-        return arrival_date;
-    }
-
-    public String getArrivalTime() {
-        return arrival_time;
-    }
-    
-    public String getCarrier() {
-        return carrier;
-    }
-    
-    public int getStops() {
-        return stops;
-    }
-
-    public int getPrice() {
-        return price;
+    public LocalDateTime getArrivalDateTime(){
+        LocalDateTime arrivalDateTime = LocalDateTime.parse(this.arrival_date + " " + this.arrival_time, DateTimeFormatter.ofPattern("d.M.y H:m")).plusYears(2000);
+        return arrivalDateTime;
     }
 
     public String toString(){

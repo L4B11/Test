@@ -1,74 +1,108 @@
 package com.example;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-import com.example.Model.Root;
-import com.example.Model.Tickets;
+import com.example.model.TicketModel;
+import com.example.model.Tickets;
 
 public class Main {
-    public static  String gettime(String str){
-        JsonSimpleParser parser = new JsonSimpleParser();
-        Root root = parser.parse();
-        int m = -1;
-        for (int i = 0; i < root.getTickets().size(); i++){
-            if (root.getTickets().get(i).getCarrier().equals(str)){
-                if (m == -1 || m > getmin(i)){ 
-                    m = getmin(i);
+
+    final static int GMT_VVO = 10;
+    final static int GMT_TLV = 3;
+
+    public static Float SrednayaMediana(TicketModel tick){
+
+        List <Integer> price = new ArrayList<>();
+
+        float Sred = 0;
+        float Mediana;
+
+        for (Tickets ticket : tick.getTickets()){
+            if (ticket.getOrigin().equals("VVO") && ticket.getDestination().equals("TLV")) {
+                price.add(ticket.getPrice());
+            }
+        }
+        Collections.sort(price);
+        if (price.size()%2 == 1){
+            Mediana = price.get(price.size()/2);
+        }else{
+            Mediana = (price.get(price.size()/2-1) + price.get(price.size()/2))/2;
+        }
+        for (Integer pr : price){ Sred += pr;}
+        Sred = Sred/price.size();
+        
+
+        return Math.abs(Sred - Mediana);
+    }
+
+
+    public static void Vtime(String str, TicketModel tick){
+        //JsonSimpleParser parser = new JsonSimpleParser();
+        //TicketModel tick = parser.parse();
+        Duration time = null;
+        Period date = null;
+        for (Tickets ticket : tick.getTickets()) {
+            if (ticket.getCarrier().equals(str) && ticket.getOrigin().equals("VVO") && ticket.getDestination().equals("TLV")){
+                LocalDateTime departureDateTime = LocalDateTime.parse(ticket.getDeparture_date() + " " + ticket.getDeparture_time(), DateTimeFormatter.ofPattern("d.M.y H:m")).plusYears(2000);
+                LocalDateTime arrivalDateTime = LocalDateTime.parse(ticket.getArrival_date() + " " + ticket.getArrival_time(), DateTimeFormatter.ofPattern("d.M.y H:m")).plusYears(2000);
+                if (time == null){
+                    time = Duration.between(departureDateTime, arrivalDateTime);
+                    date = Period.between(departureDateTime.toLocalDate(), arrivalDateTime.toLocalDate());
+                }else{
+                    Duration VTime = Duration.between(departureDateTime, arrivalDateTime);
+                    Period VDate = Period.between(departureDateTime.toLocalDate(), arrivalDateTime.toLocalDate());
+                    if (VTime.compareTo(time) < 0 && VDate.minus(date).getDays() <= 0 && VDate.minus(date).getMonths() <= 0 && VDate.minus(date).getDays() <= 0) {
+                        time = VTime;
+                        date = VDate;
+                    }
                 }
             }
         }
-        if (m == -1){ return "-1";}
-        String finaltime = "";
-        if (m%60 > 9){
-            finaltime = String.valueOf(m/60) + ":" + String.valueOf(m%60);
-        }else{
-            finaltime = String.valueOf(m/60) + ":0" + String.valueOf(m%60);
-        }
-        return finaltime;
-    }
 
-    public static  int getmin(int i){
-        JsonSimpleParser parser = new JsonSimpleParser();
-        Root root = parser.parse();
-        // в данном методе я не буду расписывать учитывание дат при подсчете времени тк они никогда не меняются
-        String start = root.getTickets().get(i).getDepartureTime();
-        String end = root.getTickets().get(i).getArrivalTime();
-        String[] st = start.split(":");
-        String[] en = end.split(":");
-        
-        int min = Integer.parseInt(en[0])*60 + Integer.parseInt(en[1]) - Integer.parseInt(st[0])*60 - Integer.parseInt(st[0]);
-        
-        return min;
+        System.out.println(str + " Минимальная продолжительность: " + date.getYears() + " лет " + date.getMonths() + " мес " + date.getDays() + " дн " + (time.toHours() + GMT_VVO-GMT_TLV) + " час " + time.toMinutesPart() + " мин " + time.toSecondsPart() + " сек");
     }
 
     public static void main(String[] args) {
         JsonSimpleParser parser = new JsonSimpleParser();
-        Root root = parser.parse();
-        ArrayList<Tickets> ticList = new ArrayList<>();
-        ArrayList<Integer> x = new ArrayList<>();
-        x.add(1);
-        x.add(2);
-        x.add(3);
-        x.add(4);
-        x.add(5);
-        x.add(6);
-        for (int i = 0; i < x.size(); i++){
-            System.out.println(x.get(i));
+        TicketModel tick = parser.parse();
+
+        List<String> carriers = new ArrayList<>();
+        carriers.add("TK");
+        carriers.add("S7");
+        carriers.add("SU");
+        carriers.add("BA");
+        for (String str : carriers) {
+            Vtime(str, tick);
         }
-        System.out.println("TK: " + gettime("TK"));
-        System.out.println("S7: " + gettime("S7"));
-        System.out.println("SU: " + gettime("SU"));
-        System.out.println("BA: " + gettime("BA"));
-        for (int i = 0; i < root.getTickets().size(); i++){
+        System.out.println("Разницa между средней ценой и медианой для\r\n" + //
+                        "полета между городами  Владивосток и Тель-Авив составляет: " + SrednayaMediana(tick));
+        
+        // LocalDateTime departureDateTime = LocalDateTime.parse(tick.getTickets().get(1).getDeparture_date() + " " + tick.getTickets().get(1).getDeparture_time(), DateTimeFormatter.ofPattern("d.M.y H:m")).plusYears(2000);
+        // LocalDateTime arrivalDateTime = LocalDateTime.parse(tick.getTickets().get(1).getArrival_date() + " " + tick.getTickets().get(1).getArrival_time(), DateTimeFormatter.ofPattern("d.M.y H:m")).plusYears(2000);
+        
+        // Duration time = Duration.between(departureDateTime, arrivalDateTime);
+        // Period date = Period.between(departureDateTime.toLocalDate(), arrivalDateTime.toLocalDate());
 
-        }
+        //System.out.println("Продолжительность: " + date.getYears() + " лет " + date.getMonths() + " мес " + date.getDays() + " дн " + (time.toHours() + GMT_VVO-GMT_TLV) + " час " + time.toMinutesPart() + " мин " + time.toSecondsPart() + " сек");
+        // for (Tickets ticket : tick.getTickets()) {
+        //     System.out.println("da   " + ticket.getDepartureDateTime());
+        //     System.out.println("net  " + ticket.getArrivalDateTime());
+        // }
+        // System.err.println(departureDateTime);
+        // System.err.println(arrivalDateTime);
+        // System.err.println();
 
-
-        root.getTickets().stream().filter(tickets -> {
+        /*tick.getTickets().stream().filter(tickets -> {
             return tickets.getPrice() == 7000;
         }).forEach(tickets -> {
             System.out.println("Ticket: " + tickets.toString());
-        });
+        }); */
 
         //System.err.println("Root: " + root.toString());
     }

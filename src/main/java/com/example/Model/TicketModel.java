@@ -1,8 +1,8 @@
-package com.example.Model;
+package com.example.model;
 
 import java.util.List;
 
-public class Root {
+public class TicketModel {
     
     private List<Tickets> tickets;
 

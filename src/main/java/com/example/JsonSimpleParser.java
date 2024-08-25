@@ -3,13 +3,14 @@ package com.example;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import com.example.Model.Root;
-import com.example.Model.Tickets;
+import com.example.model.TicketModel;
+import com.example.model.Tickets;
 
 public class JsonSimpleParser {
     
@@ -29,9 +30,9 @@ public class JsonSimpleParser {
 
 
 
-    public Root parse(){
+    public TicketModel parse(){
 
-        Root root = new Root();
+        TicketModel root = new TicketModel();
 
         JSONParser parser = new JSONParser();
         
@@ -41,7 +42,7 @@ public class JsonSimpleParser {
 
             JSONArray ticketsJsonArray = (JSONArray) rootJSONObject.get(TAG_Name_Main);
 
-            ArrayList<Tickets> ticketsList = new ArrayList<>();
+            List<Tickets> ticketsList = new ArrayList<>();
             for (Object it: ticketsJsonArray) {
                 JSONObject ticketsJSONObject = (JSONObject) it;
 
