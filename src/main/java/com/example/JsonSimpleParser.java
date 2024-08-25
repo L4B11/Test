@@ -35,7 +35,7 @@ public class JsonSimpleParser {
         TicketModel root = new TicketModel();
 
         JSONParser parser = new JSONParser();
-        
+         
         try (InputStreamReader reader = new InputStreamReader(new FileInputStream("demo/src/main/resources/tickets.json"), "UTF8")){   
 
             JSONObject rootJSONObject = (JSONObject) parser.parse(reader);
