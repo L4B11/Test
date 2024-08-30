@@ -15,6 +15,6 @@ public class TicketModel {
     }
 
     public String toString(){
-        return "Root{" + "ticket = '" + tickets + "}'";
+        return "TicketModel{" + "ticket = '" + tickets + "}'";
     }
 }

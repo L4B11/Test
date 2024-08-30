@@ -14,7 +14,7 @@ import com.example.model.Tickets;
 
 public class JsonSimpleParser {
     
-    private static final String TAG_Name_Main = "tickets";
+    private static final String tagNameMain = "tickets";
 
     private static final String tagOrigin = "origin";
     private static final String tagOriginName = "origin_name";
@@ -32,17 +32,17 @@ public class JsonSimpleParser {
 
     public TicketModel parse(){
 
-        TicketModel root = new TicketModel();
+        TicketModel modelOfTickets = new TicketModel();
 
-        JSONParser parser = new JSONParser();
+        JSONParser parserTicket = new JSONParser();
          
         try (InputStreamReader reader = new InputStreamReader(new FileInputStream("demo/src/main/resources/tickets.json"), "UTF8")){   
 
-            JSONObject rootJSONObject = (JSONObject) parser.parse(reader);
+            JSONObject rootJSONObject = (JSONObject) parserTicket.parse(reader);
 
-            JSONArray ticketsJsonArray = (JSONArray) rootJSONObject.get(TAG_Name_Main);
+            JSONArray ticketsJsonArray = (JSONArray) rootJSONObject.get(tagNameMain);
 
-            List<Tickets> ticketsList = new ArrayList<>();
+            List<Tickets> ticketManager = new ArrayList<>();
             for (Object it: ticketsJsonArray) {
                 JSONObject ticketsJSONObject = (JSONObject) it;
 
@@ -60,12 +60,12 @@ public class JsonSimpleParser {
 
                 Tickets tickets = new Tickets(OriginTickets, OriginNameTickets, DestinationTickets, DestinationNameTickets, DepartureDateTickets, DepartureTimeTickets, ArrivalDateTickets, ArrivalTimeTickets, CarrierTickets, (int) StopsTickets, (int) PriceTickets);
 
-                ticketsList.add(tickets);
+                ticketManager.add(tickets);
             }
 
-            root.setTickets(ticketsList);
+            modelOfTickets.setTickets(ticketManager);
 
-            return root;
+            return modelOfTickets;
         } catch (Exception e) {
             System.out.println("Parsing Error " + e.toString());
         }
