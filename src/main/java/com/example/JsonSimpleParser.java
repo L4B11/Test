@@ -16,17 +16,17 @@ public class JsonSimpleParser {
     
     private static final String TAG_Name_Main = "tickets";
 
-    private static final String TAG_origin = "origin";
-    private static final String TAG_origin_name = "origin_name";
-    private static final String TAG_destination = "destination";
-    private static final String TAG_destination_name = "destination_name";
-    private static final String TAG_departure_date = "departure_date";
-    private static final String TAG_departure_time = "departure_time";
-    private static final String TAG_arrival_date = "arrival_date";
-    private static final String TAG_arrival_time = "arrival_time";
-    private static final String TAG_carrier = "carrier";
-    private static final String TAG_stops = "stops";
-    private static final String TAG_price = "price";
+    private static final String tagOrigin = "origin";
+    private static final String tagOriginName = "origin_name";
+    private static final String tagDestination = "destination";
+    private static final String tagDestinationName = "destination_name";
+    private static final String tagDepartureDate = "departure_date";
+    private static final String tagDepartureTime = "departure_time";
+    private static final String tagArrivalDate = "arrival_date";
+    private static final String tagArrivalTime = "arrival_time";
+    private static final String tagCarrier = "carrier";
+    private static final String tagStops = "stops";
+    private static final String tagPrice = "price";
 
 
 
@@ -46,17 +46,17 @@ public class JsonSimpleParser {
             for (Object it: ticketsJsonArray) {
                 JSONObject ticketsJSONObject = (JSONObject) it;
 
-                String OriginTickets = (String)ticketsJSONObject.get(TAG_origin); 
-                String OriginNameTickets = (String)ticketsJSONObject.get(TAG_origin_name);
-                String DestinationTickets = (String)ticketsJSONObject.get(TAG_destination);
-                String DestinationNameTickets = (String)ticketsJSONObject.get(TAG_destination_name);
-                String DepartureDateTickets = (String)ticketsJSONObject.get(TAG_departure_date);
-                String DepartureTimeTickets = (String)ticketsJSONObject.get(TAG_departure_time);
-                String ArrivalDateTickets = (String)ticketsJSONObject.get(TAG_arrival_date);
-                String ArrivalTimeTickets = (String)ticketsJSONObject.get(TAG_arrival_time);
-                String CarrierTickets = (String)ticketsJSONObject.get(TAG_carrier);
-                long StopsTickets = (Long)ticketsJSONObject.get(TAG_stops);
-                long PriceTickets = (Long)ticketsJSONObject.get(TAG_price);
+                String OriginTickets = (String)ticketsJSONObject.get(tagOrigin); 
+                String OriginNameTickets = (String)ticketsJSONObject.get(tagOriginName);
+                String DestinationTickets = (String)ticketsJSONObject.get(tagDestination);
+                String DestinationNameTickets = (String)ticketsJSONObject.get(tagDestinationName);
+                String DepartureDateTickets = (String)ticketsJSONObject.get(tagDepartureDate);
+                String DepartureTimeTickets = (String)ticketsJSONObject.get(tagDepartureTime);
+                String ArrivalDateTickets = (String)ticketsJSONObject.get(tagArrivalDate);
+                String ArrivalTimeTickets = (String)ticketsJSONObject.get(tagArrivalTime);
+                String CarrierTickets = (String)ticketsJSONObject.get(tagCarrier);
+                long StopsTickets = (Long)ticketsJSONObject.get(tagStops);
+                long PriceTickets = (Long)ticketsJSONObject.get(tagPrice);
 
                 Tickets tickets = new Tickets(OriginTickets, OriginNameTickets, DestinationTickets, DestinationNameTickets, DepartureDateTickets, DepartureTimeTickets, ArrivalDateTickets, ArrivalTimeTickets, CarrierTickets, (int) StopsTickets, (int) PriceTickets);
 

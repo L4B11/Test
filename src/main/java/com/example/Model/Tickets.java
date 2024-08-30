@@ -8,19 +8,19 @@ public class Tickets {
     @Getter
     private String origin;
     @Getter
-    private String origin_name;
+    private String originName;
     @Getter
     private String destination;
     @Getter
-    private String destination_name;
+    private String destinationName;
     @Getter
-    private String departure_date;
+    private String departureDate;
     @Getter
-    private String departure_time;
+    private String departureTime;
     @Getter
-    private String arrival_date;
+    private String arrivalDate;
     @Getter
-    private String arrival_time;
+    private String arrivalTime;
     @Getter
     private String carrier;
     @Getter
@@ -28,31 +28,31 @@ public class Tickets {
     @Getter
     private int price;
 
-    public Tickets(String origin, String origin_name, String destination, String destination_name, String departure_date, String departure_time, String arrival_date, String arrival_time, String carrier, int stops, int price){
+    public Tickets(String origin, String originName, String destination, String destinationName, String departureDate, String departureTime, String arrivalDate, String arrivalTime, String carrier, int stops, int price){
         this.origin = origin;
-        this.origin_name = origin_name;
+        this.originName = originName;
         this.destination = destination;
-        this.destination_name = destination_name;
-        this.departure_date = departure_date;
-        this.departure_time = departure_time;
-        this.arrival_date = arrival_date;
-        this.arrival_time = arrival_time;
+        this.destinationName = destinationName;
+        this.departureDate = departureDate;
+        this.departureTime = departureTime;
+        this.arrivalDate = arrivalDate;
+        this.arrivalTime = arrivalTime;
         this.carrier = carrier;
         this.stops = stops;
         this.price = price;
     }
 
     public LocalDateTime getDepartureDateTime(){
-        LocalDateTime departureDateTime = LocalDateTime.parse(this.departure_date + " " + this.departure_time, DateTimeFormatter.ofPattern("d.M.y H:m")).plusYears(2000);
+        LocalDateTime departureDateTime = LocalDateTime.parse(this.departureDate + " " + this.departureTime, DateTimeFormatter.ofPattern("d.M.y H:m")).plusYears(2000);
         return departureDateTime;
     }
 
     public LocalDateTime getArrivalDateTime(){
-        LocalDateTime arrivalDateTime = LocalDateTime.parse(this.arrival_date + " " + this.arrival_time, DateTimeFormatter.ofPattern("d.M.y H:m")).plusYears(2000);
+        LocalDateTime arrivalDateTime = LocalDateTime.parse(this.arrivalDate + " " + this.arrivalTime, DateTimeFormatter.ofPattern("d.M.y H:m")).plusYears(2000);
         return arrivalDateTime;
     }
 
     public String toString(){
-        return "Tickets{ " + "origin = '" + origin + "' origin_name = " + origin_name + " destination = " + destination + " destination_name = " + destination_name + " departure_date = " + departure_date + " departure_time = " + departure_time + " arrival_date = " + arrival_date + " arrival_time = " + arrival_time + " carrier = " + carrier + " stops = " + stops + " price = " + price + '}';
+        return "Tickets{ " + "origin = '" + origin + "' originName = " + originName + " destination = " + destination + " destinationName = " + destinationName + " departureDate = " + departureDate + " departureTime = " + departureTime + " arrivalDate = " + arrivalDate + " arrivalTime = " + arrivalTime + " carrier = " + carrier + " stops = " + stops + " price = " + price + '}';
     }
 }

@@ -13,56 +13,57 @@ import com.example.model.Tickets;
 
 public class TicketServis {
     
-    final static int GMT_VVO = 10;
-    final static int GMT_TLV = 3;
+    final static int greenwichMeanVladivostok = 10;
+    final static int greenwichMeanTimeTelAviv = 3; 
 
-    public static void Vtime(String str, TicketModel tick, String or, String des){
-        Duration time = null;
-        Period date = null;
+    public static void minimumFlightTime(String str, TicketModel tick, String or, String des){
+        Duration flightTime = null;
+        Period flightDate = null;
         for (Tickets ticket : tick.getTickets()) {
             if (ticket.getCarrier().equals(str) && ticket.getOrigin().equals(or) && ticket.getDestination().equals(des)){
-                LocalDateTime departureDateTime = LocalDateTime.parse(ticket.getDeparture_date() + " " + ticket.getDeparture_time(), DateTimeFormatter.ofPattern("d.M.y H:m")).plusYears(2000);
-                LocalDateTime arrivalDateTime = LocalDateTime.parse(ticket.getArrival_date() + " " + ticket.getArrival_time(), DateTimeFormatter.ofPattern("d.M.y H:m")).plusYears(2000);
-                if (time == null){
-                    time = Duration.between(departureDateTime, arrivalDateTime);
-                    date = Period.between(departureDateTime.toLocalDate(), arrivalDateTime.toLocalDate());
+                LocalDateTime departureDateTime = LocalDateTime.parse(ticket.getDepartureDate() + " " + ticket.getDepartureTime(), DateTimeFormatter.ofPattern("d.M.y H:m")).plusYears(2000);
+                LocalDateTime arrivalDateTime = LocalDateTime.parse(ticket.getArrivalDate() + " " + ticket.getArrivalTime(), DateTimeFormatter.ofPattern("d.M.y H:m")).plusYears(2000);
+                if (flightTime == null){
+                    flightTime = Duration.between(departureDateTime, arrivalDateTime);
+                    flightDate = Period.between(departureDateTime.toLocalDate(), arrivalDateTime.toLocalDate());
                 }else{
-                    Duration VTime = Duration.between(departureDateTime, arrivalDateTime);
-                    Period VDate = Period.between(departureDateTime.toLocalDate(), arrivalDateTime.toLocalDate());
-                    if (VTime.compareTo(time) < 0 && VDate.minus(date).getYears() <= 0 && VDate.minus(date).getMonths() <= 0 && VDate.minus(date).getDays() <= 0) {
-                        time = VTime;
-                        date = VDate;
+                    Duration deltaflightTime = Duration.between(departureDateTime, arrivalDateTime);
+                    Period deltaflightDate = Period.between(departureDateTime.toLocalDate(), arrivalDateTime.toLocalDate());
+                    if (deltaflightTime.compareTo(flightTime) < 0 && deltaflightDate.minus(flightDate).getYears() <= 0 && deltaflightDate.minus(flightDate).getMonths() <= 0 && deltaflightDate.minus(flightDate).getDays() <= 0) {
+                        flightTime = deltaflightTime;
+                        flightDate = deltaflightDate;
                     }
                 }
             }
         }
 
-        System.out.println(str + " Минимальная продолжительность: " + date.getYears() + " лет " + date.getMonths() + " мес " + date.getDays() + " дн " + (time.toHours() + GMT_VVO-GMT_TLV) + " час " + time.toMinutesPart() + " мин " + time.toSecondsPart() + " сек");
+        System.out.println(str + " Минимальная продолжительность: " + flightDate.getYears() + " лет " + flightDate.getMonths() + " месяцев " + flightDate.getDays() + " дней " + 
+                        (flightTime.toHours() + greenwichMeanVladivostok-greenwichMeanTimeTelAviv) + " часов " + flightTime.toMinutesPart() + " минут " + flightTime.toSecondsPart() + " секунд");
     }
 
-    public static void SrednayaMediana(TicketModel tick, String or, String des){
+    public static void differenceBetweenAvgAndMedian(TicketModel ticketList, String originTown, String destinationTown){
 
-        List <Integer> price = new ArrayList<>();
+        List <Integer> priceList = new ArrayList<>();
 
-        float Sred = 0;
-        float Mediana;
+        float avgPrice;
+        float medianPrice;
 
-        for (Tickets ticket : tick.getTickets()){
-            if (ticket.getOrigin().equals(or) && ticket.getDestination().equals(des)) {
-                price.add(ticket.getPrice());
+        for (Tickets ticket : ticketList.getTickets()){
+            if (ticket.getOrigin().equals(originTown) && ticket.getDestination().equals(destinationTown)) {
+                priceList.add(ticket.getPrice());
             }
         }
-        Collections.sort(price);
-        if (price.size()%2 == 1){
-            Mediana = price.get(price.size()/2);
+        Collections.sort(priceList);
+        // Расчет медианы в зависимости от четности 
+        if (priceList.size()%2 == 1){
+            medianPrice = priceList.get(priceList.size()/2);
         }else{
-            Mediana = (price.get(price.size()/2-1) + price.get(price.size()/2))/2;
+            medianPrice = (priceList.get(priceList.size()/2-1) + priceList.get(priceList.size()/2))/2;
         }
-        for (Integer pr : price){ Sred += pr;}
-        Sred = Sred/price.size();
+        avgPrice = priceList.stream().mapToInt(Integer::intValue).sum()/priceList.size();
         
-        System.out.println("Разницa между средней ценой и медианой для\r\n" + //
-                        "полета между городами  Владивосток и Тель-Авив составляет: " + Math.abs(Sred - Mediana));
+        System.out.println("Разницa между средней ценой и медианой для\r\n" + 
+                        "полета между городами  Владивосток и Тель-Авив составляет: " + Math.abs(avgPrice - medianPrice));
     }
 
 
